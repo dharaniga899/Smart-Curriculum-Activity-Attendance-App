@@ -149,4 +149,3 @@ This project is developed for educational and academic learning purposes to demo
 
 ## License
 This project is intended for academic and non-commercial use.
-[Click here to view Documentation](./Smart_Curriculum_Activity_Attendance_App_Documentation__1_.pdf)
