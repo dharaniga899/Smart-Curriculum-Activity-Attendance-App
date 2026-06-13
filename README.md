@@ -149,3 +149,16 @@ This project is developed for educational and academic learning purposes to demo
 
 ## License
 This project is intended for academic and non-commercial use.
+
+# Smart Curriculum Activity & Attendance App
+
+## Project Documentation
+Download the project documentation from:
+
+Project_Documentation.pdf
+
+## Technology Stack
+- React Native / Flutter
+- Python (Django/Flask)
+- MySQL / Firebase
+- AI/ML
