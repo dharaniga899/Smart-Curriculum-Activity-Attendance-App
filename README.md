@@ -155,7 +155,7 @@ This project is intended for academic and non-commercial use.
 ## Project Documentation
 Download the project documentation from:
 
-Project_Documentation.pdf
+Smart_Curriculum_Activity_Attendance_App.docx
 
 ## Technology Stack
 - React Native / Flutter
