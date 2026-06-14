@@ -1,0 +1,86 @@
+-- Smart Curriculum Activity & Attendance App
+-- Database Schema
+
+CREATE DATABASE SmartCurriculumDB;
+USE SmartCurriculumDB;
+
+-- Admin Table
+CREATE TABLE Admin (
+    admin_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Faculty Table
+CREATE TABLE Faculty (
+    faculty_id INT PRIMARY KEY AUTO_INCREMENT,
+    faculty_name VARCHAR(100) NOT NULL,
+    department VARCHAR(100),
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(15)
+);
+
+-- Student Table
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY AUTO_INCREMENT,
+    register_no VARCHAR(20) UNIQUE NOT NULL,
+    student_name VARCHAR(100) NOT NULL,
+    department VARCHAR(100),
+    year_of_study INT,
+    email VARCHAR(100) UNIQUE,
+    phone VARCHAR(15),
+    password VARCHAR(255) NOT NULL
+);
+
+-- Course Table
+CREATE TABLE Courses (
+    course_id INT PRIMARY KEY AUTO_INCREMENT,
+    course_name VARCHAR(100) NOT NULL,
+    course_code VARCHAR(20) UNIQUE NOT NULL,
+    faculty_id INT,
+    FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id)
+);
+
+-- Attendance Table
+CREATE TABLE Attendance (
+    attendance_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT,
+    course_id INT,
+    attendance_date DATE NOT NULL,
+    status ENUM('Present', 'Absent') NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
+);
+
+-- Curriculum Activities Table
+CREATE TABLE Activities (
+    activity_id INT PRIMARY KEY AUTO_INCREMENT,
+    activity_name VARCHAR(150) NOT NULL,
+    activity_type VARCHAR(50),
+    description TEXT,
+    activity_date DATE,
+    faculty_id INT,
+    FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id)
+);
+
+-- Student Participation Table
+CREATE TABLE Participation (
+    participation_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT,
+    activity_id INT,
+    participation_status ENUM('Participated', 'Not Participated'),
+    remarks VARCHAR(255),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
+);
+
+-- Reports Table
+CREATE TABLE Reports (
+    report_id INT PRIMARY KEY AUTO_INCREMENT,
+    report_name VARCHAR(100),
+    generated_date DATE,
+    generated_by INT,
+    FOREIGN KEY (generated_by) REFERENCES Admin(admin_id)
+);
