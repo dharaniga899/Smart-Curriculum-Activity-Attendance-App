@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Activities{% endblock %}
+{% block page_title %}Activities{% endblock %}
+
+{% block content %}
+
+<div class="activities-intro card">
+  <h3>Curriculum &amp; Co-curricular Activities</h3>
+  <p>Register for upcoming events and track your participation history.</p>
+</div>
+
+<div class="activities-grid">
+  {% for act in activities %}
+  <div class="act-card {% if act.activity_id in my_ids %}act-joined{% endif %}">
+    <div class="act-category cat-{{ act.category|lower|replace(' ','') }}">{{ act.category }}</div>
+    <div class="act-name">{{ act.activity_name }}</div>
+    <div class="act-date">📅 {{ act.activity_date }}</div>
+    <div class="act-desc">{{ act.description }}</div>
+
+    {% if act.activity_id in my_ids %}
+      <div class="act-registered">✓ Registered</div>
+    {% else %}
+      <form method="POST" action="{{ url_for('join_activity', act_id=act.activity_id) }}">
+        <button class="btn-primary btn-sm" type="submit">Register</button>
+      </form>
+    {% endif %}
+  </div>
+  {% else %}
+  <p class="empty-msg">No activities available right now.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

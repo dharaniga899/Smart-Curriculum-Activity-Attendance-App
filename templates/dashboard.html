@@ -1,28 +1,126 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Student Dashboard</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 
-<h1>Student Dashboard</h1>
+{% block content %}
+<!-- Welcome banner -->
+<div class="welcome-banner">
+  <div>
+    <div class="welcome-greeting">Good day, {{ student.student_name.split()[0] }} 👋</div>
+    <div class="welcome-info">{{ student.department }} · Year {{ student.year }} · Batch 2028</div>
+  </div>
+  <div class="welcome-date" id="live-date"></div>
+</div>
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Attendance</th>
-    </tr>
+<!-- Stat cards -->
+<div class="cards-grid">
+  <div class="stat-card accent-blue">
+    <div class="stat-icon">✓</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ pct }}%</div>
+      <div class="stat-label">Attendance</div>
+      <div class="stat-sub">{{ present }} / {{ total }} classes</div>
+    </div>
+    <!-- Mini progress ring -->
+    <svg class="ring" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="6"/>
+      <circle cx="32" cy="32" r="26" fill="none" stroke="white" stroke-width="6"
+              stroke-dasharray="{{ (pct/100*163.4)|round(1) }} 163.4"
+              stroke-linecap="round" transform="rotate(-90 32 32)"/>
+    </svg>
+  </div>
 
-    {% for student in students %}
-    <tr>
-        <td>{{ student.id }}</td>
-        <td>{{ student.name }}</td>
-        <td>{{ student.attendance }}</td>
-    </tr>
-    {% endfor %}
+  <div class="stat-card accent-teal">
+    <div class="stat-icon">◈</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ act_count }}</div>
+      <div class="stat-label">Activities</div>
+      <div class="stat-sub">Participated / Registered</div>
+    </div>
+  </div>
 
-</table>
+  <div class="stat-card accent-violet">
+    <div class="stat-icon">⊟</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ courses|length }}</div>
+      <div class="stat-label">Courses</div>
+      <div class="stat-sub">This semester</div>
+    </div>
+  </div>
 
-</body>
-</html>
+  <div class="stat-card accent-amber">
+    <div class="stat-icon">▲</div>
+    <div class="stat-body">
+      {% set shortfall = [75 - pct, 0]|max %}
+      <div class="stat-value">{{ 'On track' if pct >= 75 else (shortfall|round(1)|string + '% gap') }}</div>
+      <div class="stat-label">75% Target</div>
+      <div class="stat-sub">{{ 'Minimum attendance met ✓' if pct >= 75 else 'Below required threshold' }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Lower grid: Recent attendance + Upcoming activities + Courses -->
+<div class="dash-grid">
+
+  <!-- Recent attendance -->
+  <div class="card">
+    <div class="card-head">
+      <h3>Recent Attendance</h3>
+      <a href="{{ url_for('attendance') }}" class="card-link">View all →</a>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Date</th><th>Course</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for r in recent %}
+        <tr>
+          <td>{{ r.attendance_date }}</td>
+          <td>{{ r.course_name }}</td>
+          <td><span class="badge badge-{{ 'green' if r.status=='Present' else 'red' }}">{{ r.status }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="empty-row">No records yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Upcoming activities -->
+  <div class="card">
+    <div class="card-head">
+      <h3>Upcoming Activities</h3>
+      <a href="{{ url_for('activities') }}" class="card-link">View all →</a>
+    </div>
+    <div class="activity-list">
+      {% for a in upcoming %}
+      <div class="activity-item">
+        <div class="activity-dot"></div>
+        <div class="activity-info">
+          <div class="activity-name">{{ a.activity_name }}</div>
+          <div class="activity-meta">{{ a.activity_date }} · {{ a.category }}</div>
+        </div>
+      </div>
+      {% else %}
+      <p class="empty-msg">No upcoming activities</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Courses enrolled -->
+  <div class="card">
+    <div class="card-head">
+      <h3>My Courses</h3>
+    </div>
+    <div class="course-list">
+      {% for c in courses %}
+      <div class="course-pill">
+        <span class="course-icon">◉</span>
+        {{ c.course_name }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

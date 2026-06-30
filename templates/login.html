@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — SmartEdu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+
+<div class="auth-split">
+  <!-- Left panel -->
+  <div class="auth-panel-left">
+    <div class="auth-brand">
+      <div class="auth-logo">📚</div>
+      <h1>SmartEdu</h1>
+      <p>Smart Curriculum Activity<br>&amp; Attendance App</p>
+    </div>
+    <div class="auth-tagline">
+      <div class="tag-item">✓ Track Attendance</div>
+      <div class="tag-item">◈ Manage Activities</div>
+      <div class="tag-item">⊞ View Dashboard</div>
+    </div>
+    <div class="auth-batch">III AIML‑A · Batch 2028</div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="auth-panel-right">
+    <div class="auth-card">
+      <h2 class="auth-heading">Welcome back</h2>
+      <p class="auth-sub">Sign in to your student account</p>
+
+      {% if error %}
+        <div class="auth-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="field-group">
+          <label class="field-label">Email address</label>
+          <input class="field-input" type="email" name="email"
+                 placeholder="yourname@college.edu" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input class="field-input" type="password" name="password"
+                 placeholder="Enter your password" required />
+        </div>
+        <button class="btn-primary full-width" type="submit">Sign In</button>
+      </form>
+
+      <p class="auth-footer">
+        Don't have an account?
+        <a href="{{ url_for('register') }}">Register here</a>
+      </p>
+
+      <div class="demo-hint">
+        <strong>Demo login:</strong> dharani@college.edu / pass123
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

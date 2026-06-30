@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+
+<div class="profile-grid">
+
+  <!-- Profile card -->
+  <div class="card profile-card">
+    <div class="avatar-circle">{{ student.student_name[0].upper() }}</div>
+    <div class="profile-name">{{ student.student_name }}</div>
+    <div class="profile-email">{{ student.email }}</div>
+    <div class="profile-tags">
+      <span class="badge badge-blue">{{ student.department }}</span>
+      <span class="badge badge-teal">Year {{ student.year }}</span>
+    </div>
+
+    <!-- Edit form -->
+    <div class="edit-section">
+      <h4>Edit Details</h4>
+
+      {% if success %}<div class="flash flash-success">{{ success }}</div>{% endif %}
+      {% if error   %}<div class="auth-error">{{ error }}</div>{% endif %}
+
+      <form method="POST" action="{{ url_for('profile') }}">
+        <div class="field-group">
+          <label class="field-label">Full Name</label>
+          <input class="field-input" type="text" name="name"
+                 value="{{ student.student_name }}" required />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Department</label>
+            <select class="field-input" name="department">
+              {% for d in ['AI & ML','CSE','ECE','IT','MECH'] %}
+              <option {{ 'selected' if student.department==d }}>{{ d }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Year</label>
+            <select class="field-input" name="year">
+              {% for y in [1,2,3,4] %}
+              <option value="{{ y }}" {{ 'selected' if student.year==y }}>Year {{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary full-width" type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Activity history -->
+  <div class="card">
+    <div class="card-head">
+      <h3>My Activity History</h3>
+    </div>
+    {% if my_activities %}
+    <table class="data-table">
+      <thead>
+        <tr><th>Activity</th><th>Date</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for a in my_activities %}
+        <tr>
+          <td>{{ a.activity_name }}</td>
+          <td>{{ a.activity_date }}</td>
+          <td>
+            <span class="badge badge-{{ 'green' if a.participation_status=='Participated' else 'blue' }}">
+              {{ a.participation_status }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-msg">You haven't registered for any activities yet.<br>
+      <a href="{{ url_for('activities') }}">Browse activities →</a>
+    </p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,29 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Registration</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — SmartEdu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="auth-page">
 
-<h2>Student Registration</h2>
+<div class="auth-split">
+  <!-- Left panel -->
+  <div class="auth-panel-left">
+    <div class="auth-brand">
+      <div class="auth-logo">📚</div>
+      <h1>SmartEdu</h1>
+      <p>Smart Curriculum Activity<br>&amp; Attendance App</p>
+    </div>
+    <div class="auth-tagline">
+      <div class="tag-item">✓ Real-time Attendance</div>
+      <div class="tag-item">◈ Activity Tracking</div>
+      <div class="tag-item">⊞ Smart Dashboard</div>
+    </div>
+    <div class="auth-batch">III AIML‑A · Batch 2028</div>
+  </div>
 
-<form action="/" method="GET">
+  <!-- Right panel -->
+  <div class="auth-panel-right">
+    <div class="auth-card">
+      <h2 class="auth-heading">Create account</h2>
+      <p class="auth-sub">Join your college's smart attendance system</p>
 
-    <label>Full Name:</label><br>
-    <input type="text" placeholder="Enter your full name"><br><br>
+      {% if error %}
+        <div class="auth-error">{{ error }}</div>
+      {% endif %}
 
-    <label>Email:</label><br>
-    <input type="email" placeholder="Enter your email"><br><br>
+      <form method="POST" action="{{ url_for('register') }}">
+        <div class="field-group">
+          <label class="field-label">Full Name</label>
+          <input class="field-input" type="text" name="name"
+                 placeholder="e.g. Dharaniga V.R." required />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email address</label>
+          <input class="field-input" type="email" name="email"
+                 placeholder="yourname@college.edu" required />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Department</label>
+            <select class="field-input" name="department" required>
+              <option value="">Select dept.</option>
+              <option value="AI &amp; ML">AI &amp; ML</option>
+              <option value="CSE">CSE</option>
+              <option value="ECE">ECE</option>
+              <option value="IT">IT</option>
+              <option value="MECH">MECH</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Year</label>
+            <select class="field-input" name="year" required>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3" selected>3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input class="field-input" type="password" name="password"
+                 placeholder="Create a password" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Confirm Password</label>
+          <input class="field-input" type="password" name="confirm_password"
+                 placeholder="Re-enter your password" required />
+        </div>
+        <button class="btn-primary full-width" type="submit">Create Account</button>
+      </form>
 
-    <label>Password:</label><br>
-    <input type="password" placeholder="Create your password"><br><br>
-
-    <button type="submit">Register</button>
-
-</form>
-
-<p>Already have an account?</p>
-<a href="/">Back to Login</a>
+      <p class="auth-footer">
+        Already have an account?
+        <a href="{{ url_for('login') }}">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
